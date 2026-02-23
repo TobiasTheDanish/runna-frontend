@@ -41,3 +41,31 @@ export async function getSessions(startDate?: string, endDate?: string): Promise
 
 	return res.json();
 }
+
+export async function getSession(id: string): Promise<Session> {
+	const res = await fetch(`${API_BASE}/sessions/${id}`);
+
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({}));
+		throw new Error(err.message || 'Failed to fetch session');
+	}
+
+	return res.json();
+}
+
+export async function updateSession(id: string, data: Session): Promise<Session> {
+	const res = await fetch(`${API_BASE}/sessions/${id}`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	});
+
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({}));
+		throw new Error(err.message || 'Failed to update session');
+	}
+
+	return res.json();
+}

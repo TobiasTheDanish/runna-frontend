@@ -1,4 +1,5 @@
-import Root from './label.svelte';
+import Root from "./label.svelte";
+
 export {
 	Root,
 	//

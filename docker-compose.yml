@@ -7,3 +7,4 @@ services:
     environment:
       - VITE_API_BASE_URL=${API_BASE_URL}
       - VITE_STRAVA_CLIENT_ID=${STRAVA_CLIEN_ID}
+      - PUBLIC_VITE_STRAVA_CLIENT_ID=${STRAVA_CLIEN_ID}

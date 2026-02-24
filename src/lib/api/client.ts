@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+import { VITE_API_BASE_URL } from "$env/static/private";
+const API_BASE = VITE_API_BASE_URL;
 
 export type Session = {
 	id?: string;

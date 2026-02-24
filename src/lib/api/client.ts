@@ -6,6 +6,8 @@ export type Session = {
 	distance: number;
 	duration: number; // seconds
 	notes?: string;
+	strava_activity_id?: number;
+	source?: 'manual' | 'strava';
 	created_at?: string;
 	updated_at?: string;
 };
@@ -135,4 +137,54 @@ export async function deleteGoal(id: number): Promise<void> {
 		const err = await res.json().catch(() => ({}));
 		throw new Error(err.message || 'Failed to delete goal');
 	}
+}
+
+// Strava API types and functions
+
+export type StravaConnectionStatus = {
+	connected: boolean;
+	strava_athlete_id?: number;
+	connected_at?: string;
+	last_sync?: string;
+};
+
+export async function getStravaStatus(): Promise<StravaConnectionStatus> {
+	const res = await fetch(`${API_BASE}/strava/status`);
+
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({}));
+		throw new Error(err.message || 'Failed to fetch Strava status');
+	}
+
+	return res.json();
+}
+
+export async function connectStrava(code: string): Promise<{ success: boolean }> {
+	const res = await fetch(`${API_BASE}/strava/connect`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ code })
+	});
+
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({}));
+		throw new Error(err.message || 'Failed to connect to Strava');
+	}
+
+	return res.json();
+}
+
+export async function disconnectStrava(): Promise<{ success: boolean }> {
+	const res = await fetch(`${API_BASE}/strava/disconnect`, {
+		method: 'DELETE'
+	});
+
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({}));
+		throw new Error(err.message || 'Failed to disconnect from Strava');
+	}
+
+	return res.json();
 }

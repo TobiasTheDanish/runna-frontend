@@ -163,7 +163,23 @@
 					<TableBody>
 						{#each sessions as session}
 							<TableRow>
-								<TableCell>{formatDate(session.date)}</TableCell>
+								<TableCell>
+									<div class="flex items-center gap-2">
+										{formatDate(session.date)}
+										{#if session.source === "strava"}
+											<svg
+												class="w-4 h-4 text-orange-500"
+												fill="currentColor"
+												viewBox="0 0 384 512"
+												title="Synced from Strava"
+											>
+												<path
+													d="M158.4 0L7 292h113.2L158.4 0zM154.8 512L306.2 220H193l-38.2 292z"
+												/>
+											</svg>
+										{/if}
+									</div>
+								</TableCell>
 								<TableCell>{session.distance.toFixed(2)} km</TableCell>
 								<TableCell>{formatDuration(session.duration)}</TableCell>
 								<TableCell

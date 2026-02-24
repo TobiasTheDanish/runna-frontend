@@ -15,6 +15,7 @@
 		<div class="flex gap-6 text-sm font-medium">
 			<a href="/" class="transition-colors hover:text-foreground/80 text-foreground/60">Sessions</a>
 			<a href="/goals" class="transition-colors hover:text-foreground/80 text-foreground/60">Goals</a>
+			<a href="/settings/integrations" class="transition-colors hover:text-foreground/80 text-foreground/60">Integrations</a>
 		</div>
 	</div>
 </nav>

@@ -10,9 +10,9 @@
 		CardTitle,
 	} from "$lib/components/ui/card";
 	import { getStravaStatus } from "$lib/api/client";
-	import { PUBLIC_VITE_STRAVA_CLIENT_ID } from "$env/static/public";
+	import { env } from "$env/dynamic/public";
 
-	const STRAVA_CLIENT_ID = PUBLIC_VITE_STRAVA_CLIENT_ID;
+	const STRAVA_CLIENT_ID = env.PUBLIC_VITE_STRAVA_CLIENT_ID;
 	const REDIRECT_URI = `${window.location.origin}/strava/callback`;
 	const STRAVA_AUTHORIZE_URL = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=activity:read`;
 

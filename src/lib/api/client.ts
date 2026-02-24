@@ -1,5 +1,5 @@
-import { env } from "$env/dynamic/private";
-const API_BASE = env.VITE_API_BASE_URL;
+import { env } from "$env/dynamic/public";
+const API_BASE = env.PUBLIC_VITE_API_BASE_URL;
 
 export type Session = {
 	id?: string;

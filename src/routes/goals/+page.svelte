@@ -9,6 +9,14 @@
 	let loading = $state(true);
 	let error = $state('');
 
+	let upcomingGoals = $derived(
+		goals.filter((g) => new Date(g.start_date) > new Date() && g.status !== 'Completed')
+	);
+	let completedGoals = $derived(goals.filter((g) => g.status === 'Completed'));
+	let inProgressGoals = $derived(
+		goals.filter((g) => new Date(g.start_date) <= new Date() && g.status !== 'Completed')
+	);
+
 	async function loadGoals() {
 		loading = true;
 		error = '';
@@ -36,6 +44,22 @@
 	});
 </script>
 
+{#snippet goalList(list: GoalProgress[])}
+	<div class="grid gap-6 md:grid-cols-2">
+		{#each list as goal (goal.id)}
+			<div
+				onclick={() => goto(`/goals/${goal.id}`)}
+				class="cursor-pointer transition-transform hover:scale-[1.02]"
+				role="button"
+				tabindex="0"
+				onkeydown={(e) => e.key === 'Enter' && goto(`/goals/${goal.id}`)}
+			>
+				<GoalCard {goal} onDelete={handleDelete} />
+			</div>
+		{/each}
+	</div>
+{/snippet}
+
 <div class="container mx-auto max-w-4xl py-10 space-y-8">
 	<div class="flex items-center justify-between">
 		<h1 class="text-3xl font-bold tracking-tight">Goals</h1>
@@ -55,18 +79,25 @@
 			No goals set. Create one to stay motivated!
 		</div>
 	{:else}
-		<div class="grid gap-6 md:grid-cols-2">
-			{#each goals as goal (goal.id)}
-				<div
-					onclick={() => goto(`/goals/${goal.id}`)}
-					class="cursor-pointer transition-transform hover:scale-[1.02]"
-					role="button"
-					tabindex="0"
-					onkeydown={(e) => e.key === 'Enter' && goto(`/goals/${goal.id}`)}
-				>
-					<GoalCard {goal} onDelete={handleDelete} />
-				</div>
-			{/each}
-		</div>
+		{#if inProgressGoals.length > 0}
+			<section class="space-y-4">
+				<h2 class="text-2xl font-semibold">In Progress</h2>
+				{@render goalList(inProgressGoals)}
+			</section>
+		{/if}
+
+		{#if upcomingGoals.length > 0}
+			<section class="space-y-4">
+				<h2 class="text-2xl font-semibold">Upcoming</h2>
+				{@render goalList(upcomingGoals)}
+			</section>
+		{/if}
+
+		{#if completedGoals.length > 0}
+			<section class="space-y-4">
+				<h2 class="text-2xl font-semibold">Completed</h2>
+				{@render goalList(completedGoals)}
+			</section>
+		{/if}
 	{/if}
 </div>

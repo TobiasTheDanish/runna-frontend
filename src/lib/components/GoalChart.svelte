@@ -4,7 +4,7 @@
 	import type { GoalProgress } from "$lib/api/client";
 	import { ChartContainer, ChartTooltip, type ChartConfig } from "./ui/chart";
 	import { getLocalTimeZone, today } from "@internationalized/date";
-	import { startOfDay, isAfter } from "date-fns";
+	import { startOfDay, isAfter, isBefore } from "date-fns";
 
 	let {
 		goal,
@@ -62,6 +62,15 @@
 				target: goal.target_distance * targetProgressToday,
 				actual: actualAcc,
 			});
+		} else if (
+			points.length == 0 &&
+			isBefore(startOfToday, new Date(goal.start_date))
+		) {
+			points.push({
+				date: new Date(goal.start_date),
+				target: 0,
+				actual: 0,
+			});
 		}
 
 		return points;
@@ -111,14 +120,21 @@
 				},
 				xAxis: {
 					format: (d: Date) =>
-						d.toLocaleString(undefined, { dateStyle: "short" }),
+						d.toLocaleString(undefined, {
+							month: "short",
+							day: "numeric",
+						}),
 				},
 			}}
 		>
 			{#snippet tooltip()}
 				<ChartTooltip
 					labelFormatter={(d: Date) =>
-						d.toLocaleString(undefined, { dateStyle: "short" })}
+						d.toLocaleString(undefined, {
+							year: "2-digit",
+							month: "short",
+							day: "numeric",
+						})}
 					valueFormatter={(v: number) =>
 						`${v.toLocaleString(undefined, { maximumFractionDigits: 2 })} km`}
 				/>
